@@ -1,0 +1,154 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-width: 100vw;
+    min-height: 100vh;
+    background: url('./assets/blurred_background.png');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.main-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    flex-direction: column;
+}
+
+.navbar-div {
+    margin-top: 20px;
+    display: flex;
+    align-self: center;
+    justify-content: space-between;
+    align-items: center;
+    width: 95vw;
+    height: auto;
+    justify-self: flex-start;
+}
+
+.navbar-logo {
+    color: #e6e7eb;
+    font-size: 32px;
+    font-family: "Space Mono", serif;
+}
+
+.navbar-socials {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style-type: none;
+    margin-right: 60px;
+    gap: 40px;
+}
+
+.navbar-socials-options {
+    color:white; 
+}
+
+.eyecon {
+    color: #e6e7eb;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.hero-section {
+    height: 600px;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-heading {
+    font-size: 36px;
+    color: #e6e7eb;
+    font-family: "Space Mono", serif;
+    text-align: center;
+    width: 100vw;
+}
+
+.hero-paragraph {
+    font-size: 15px;
+    color: #e6e7eb;
+    font-family: "Montserrat", sans-erif;
+    text-align: center;
+    width: 60vw;
+}
+
+.hero-button {
+    margin-top: 20px;
+}
+
+.get-started-btn {
+    background-color: #060606;
+    color: #e6e7eb;
+    border: 1.5px solid #e6e7eb;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-family: "Montserrat", sans-serif; 
+    border-radius: 25px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden; 
+    transition: all 0.6s ease; 
+    display: inline-flex; 
+    align-items: center;
+    gap: 8px; 
+}
+
+.get-started-btn .arrow {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.get-started-btn:hover {
+    background-color: #e6e7eb;
+    color: #060606;
+    transform: scale(1.11);
+}
+
+.get-started-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background-color: #e6e7eb;
+    transition: all 0.6s ease;
+}
+
+.get-started-btn:hover::before {
+    left: 0;
+}
+
+.get-started-btn:hover .arrow {
+    color: #060606;
+    z-index: 2;
+    font-weight: bold;
+}
+
+.get-started-btn:hover .get-started {
+    z-index: 2;
+    font-weight: bold;
+}
+
+.footer-div {
+    width: 100vw;
+    text-align: center;
+}
+
+.footer-div-content {
+    color: #e6e7eb;
+    font-size: 36px;
+    font-weight: 250;
+    font-family: "Montserrat", sans-serif;
+}
