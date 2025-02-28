@@ -1,0 +1,38 @@
+[
+    {
+        "name": "Block 16",
+        "parent": "MAHE",
+        "type": "Boys Hostel Block",
+        "description": "A Hostel Block primarily occupied by male freshers, sitting right in front of FC2, is not very different from Block 17 apart from the fact that it has a lot lesser number of single rooms"
+    },
+    {
+        "name": "Block 17",
+        "parent": "MAHE",
+        "type": "Boys Hostel Block",
+        "description": "A Hostel Block primarily occupied by male freshers, sitting right in front of FC2. The occupants here think that their night canteen is the best (they're wrong)."
+    },
+    {
+        "name": "Block 18",
+        "parent": "MAHE",
+        "type": "Boys Hostel Block",
+        "description": "A Hostel Block primarily occupied by male seniors, this block is infamous for having all the druggies and nashedis of the campus."
+    },
+    {
+        "name": "Block 19",
+        "parent": "MAHE",
+        "type": "Boys Hostel Block",
+        "description": "Another Hostel Block primarily occupied by male seniors, sitting right besides block 18. This block is not very different from Block 18, and is equally infamous for housing all the druggies."
+    },
+    {
+        "name": "Block 20",
+        "parent": "MAHE",
+        "type": "Boys Hostel Block",
+        "description": "A Hostel Block primarily occupied by male seniors, is famous for all the wrong reasons. This block is the farthest from academic blocks, making living here a big hassle."
+    },
+    {
+        "name": "Food Court 2",
+        "parent": "The Indian Kitchen",
+        "type": "Food Court / Mess",
+        "description": "Some call Food Court 2 the best mess/food court within the campus, while some hate it for being so far inside. Regardless, "
+    }
+]
