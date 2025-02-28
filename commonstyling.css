@@ -71,6 +71,11 @@ body {
 
 .navbar-socials-options {
     color: white;
+    transition: all 0.3s ease;
+}
+
+.navbar-socials-options:hover {
+    transform: scale(1.25);
 }
 
 .eyecon {
@@ -84,6 +89,8 @@ body {
     height: auto;
     text-align: center;
     justify-self: flex-end;
+    margin-top: 20px;
+    margin-bottom: 20px;    
 }
 
 .footer-div-content {

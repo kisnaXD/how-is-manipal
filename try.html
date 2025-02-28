@@ -3,216 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Responsive Box Grid with JSON</title>
+    <title>Animated Hover Button</title>
     <style>
-        .container {
+        body {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            gap: 20px;
-        }
-
-        .big-box {
-            width: 95vw;
-            display: flex;
-            flex-wrap: wrap;
-            column-gap: 15px;
-            row-gap: 30px;
-            padding: 15px;
-        }
-
-        .small-box {
-            width: calc(33.33% - 15px);
-            height: 350px;
-            border: 3px solid #d3d3d3;
-            border-radius: 8px;
-            background-color: white;
-            box-sizing: border-box;
-            transition: width 0.3s ease;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .box-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 10px;
-        }
-
-        .box-title {
+            height: 100vh;
             margin: 0;
-            font-size: 20px;
-            font-weight: bold;
-            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
         }
 
-        .box-type {
-            margin: 5px 0 0 0;
-            font-size: 14px;
-            color: #666;
-            font-family: Arial, sans-serif;
-        }
-
-        .box-parent {
-            font-size: 14px;
-            color: #888;
-            text-align: right;
-            font-family: Arial, sans-serif;
-        }
-
-        .box-image {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        .box-description {
-            font-size: 14px;
-            color: #333;
-            font-family: Arial, sans-serif;
-            overflow-y: auto;
-            flex-grow: 1;
-        }
-
-        .show-more {
-            cursor: pointer;
-            padding: 10px 20px;
-            font-family: Arial, sans-serif;
+        .fancy-button {
+            position: relative;
+            padding: 12px 24px;
+            background-color: #000;
+            color: #fff;
+            font-family: "Montserrat", sans-serif;
             font-size: 16px;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: transform 0.3s ease;
         }
 
-        .show-more:hover {
-            color: #666;
+        .fancy-button:hover {
+            transform: scale(1.15);
         }
 
-        .arrow {
-            border: solid #333;
-            border-width: 0 2px 2px 0;
-            display: inline-block;
-            padding: 3px;
-            transform: rotate(45deg);
+        .fancy-button span {
+            position: relative;
+            z-index: 2;
+            transition: color 0.3s ease;
         }
 
-        /* Tablet: 2 boxes per row at 1024px */
-        @media (max-width: 1024px) {
-            .small-box {
-                width: calc(50% - 15px);
+        .strip {
+            position: absolute;
+            top: 50%;
+            left: -100%; /* Start off-screen */
+            width: 150%; /* Wide enough to cover the button diagonally */
+            height: 4px; /* Thin strip */
+            background-color: #fff;
+            transform: rotate(-45deg); /* Inclined strip */
+            transform-origin: center;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .fancy-button:hover .strip {
+            animation: moveStrip 0.6s linear forwards;
+        }
+
+        /* Animation for the strip */
+        @keyframes moveStrip {
+            0% {
+                left: -100%;
             }
-        }
-
-        /* Phone: 1 box per row at 768px */
-        @media (max-width: 768px) {
-            .small-box {
-                width: 100%;
+            100% {
+                left: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="big-box" id="bigBox"></div>
-        <div class="show-more" id="showMore">
-            Show More <span class="arrow"></span>
-        </div>
-    </div>
+    <button class="fancy-button">
+        <span>Hover Me</span>
+        <div class="strip"></div>
+    </button>
 
     <script>
-        const bigBox = document.getElementById('bigBox');
-        const showMore = document.getElementById('showMore');
-        let visibleItems = 6; // Initial number of items (2 rows of 3)
-        const itemsPerLoad = 6; // 2 rows of 3 boxes per "Show More" click
-
-        // Function to create a small box with JSON data
-        function createBox(item) {
-            const smallBox = document.createElement('div');
-            smallBox.className = 'small-box';
-
-            // Header section (Name, Type, Parent)
-            const header = document.createElement('div');
-            header.className = 'box-header';
-
-            const titleSection = document.createElement('div');
-            const title = document.createElement('h3');
-            title.className = 'box-title';
-            title.textContent = item.Name;
-            const type = document.createElement('p');
-            type.className = 'box-type';
-            type.textContent = item.Type;
-            titleSection.appendChild(title);
-            titleSection.appendChild(type);
-
-            const parent = document.createElement('p');
-            parent.className = 'box-parent';
-            parent.textContent = item.Parent;
-
-            header.appendChild(titleSection);
-            header.appendChild(parent);
-
-            // Image
-            const image = document.createElement('img');
-            image.className = 'box-image';
-            image.src = item.Image;
-            image.alt = item.Name;
-
-            // Description
-            const description = document.createElement('p');
-            description.className = 'box-description';
-            description.textContent = item.Description;
-
-            // Append all elements to the small box
-            smallBox.appendChild(header);
-            smallBox.appendChild(image);
-            smallBox.appendChild(description);
-
-            return smallBox;
-        }
-
-        // Fetch and load JSON data
-        async function loadData() {
-            try {
-                const response = await fetch('events.json');
-                const data = await response.json();
-
-                // Initial load (first 6 items)
-                for (let i = 0; i < Math.min(visibleItems, data.length); i++) {
-                    bigBox.appendChild(createBox(data[i]));
-                }
-
-                // Show More click handler
-                showMore.addEventListener('click', () => {
-                    const nextItems = data.slice(visibleItems, visibleItems + itemsPerLoad);
-                    nextItems.forEach(item => {
-                        bigBox.appendChild(createBox(item));
-                    });
-                    visibleItems += itemsPerLoad;
-
-                    // Hide "Show More" if all items are loaded
-                    if (visibleItems >= data.length) {
-                        showMore.style.display = 'none';
-                    }
-                });
-
-                // Hide "Show More" initially if data is less than visibleItems
-                if (data.length <= visibleItems) {
-                    showMore.style.display = 'none';
-                }
-            } catch (error) {
-                console.error('Error loading JSON:', error);
-                bigBox.textContent = 'Failed to load data.';
-            }
-        }
-
-        // Load data when the page loads
-        window.addEventListener('load', loadData);
+        // No JavaScript needed for this effect; it's all CSS-driven
     </script>
 </body>
 </html>
