@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const logo = document.querySelector('.navbar-logo');
     logo.addEventListener('click', () => {
-        window.location.href = 'landing.html';
+        window.location.href = 'index.html';
     });
 
     const dropdownContainer = document.querySelector('.dropdown-container');
