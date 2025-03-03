@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function () {
             Parent: "MAHE",
             Type: "Boys Hostel Block",
             Image: "https://via.placeholder.com/150",
-            Description: "Another Hostel Block primarily occupied by male seniors, sitting right besides block 18. This block is not very different from Block 18, and is equally infamous for housing all the druggies."
+            Description: "Another Hostel Block primarily occupied by male seniors, sitting right beside block 18. This block is not very different from Block 18, and is equally infamous for housing all the druggies."
         },
         {
             Name: "Block 20",
@@ -186,6 +186,244 @@ document.addEventListener('DOMContentLoaded', function () {
     const modalOverlay = document.getElementById('modal-overlay');
     let visibleItems = 6;
     const itemsPerLoad = 6;
+
+    function leaveReview(itemName, itemParent, itemType) {
+        const modal = document.createElement('div');
+        modal.className = 'modal-leaveReview';
+
+        const closeButton = document.createElement('button');
+        closeButton.className = 'modal-close';
+        closeButton.innerHTML = '<i class="fas fa-times"></i>';
+        closeButton.onclick = closeModal;
+
+        const header = document.createElement('div');
+        header.className = 'modal-header';
+
+        const titleSection = document.createElement('div');
+        const title = document.createElement('h2');
+        title.classList.add('modal-title', 'review');
+        title.textContent = "Review for " + itemName;
+
+        const parentEl = document.createElement('p');
+        parentEl.className = 'modal-parent';
+        parentEl.textContent = itemParent;
+
+        header.appendChild(titleSection);
+        header.appendChild(parentEl);
+        titleSection.appendChild(title);
+
+        const typeEl = document.createElement('p');
+        typeEl.classList.add('modal-type', 'review');
+        typeEl.textContent = itemType;
+
+        const reviewHeader = document.createElement('div');
+        reviewHeader.className = 'review-header';
+
+        const nameSection = document.createElement('div');
+        nameSection.className = 'review-name-section';
+
+        const nameHeader = document.createElement('div');
+        nameHeader.className = 'review-name-header';
+
+        const nameLabel = document.createElement('label');
+        nameLabel.className = 'review-name-label';
+        nameLabel.textContent = 'Name';
+        nameLabel.style.fontFamily = '"Montserrat", sans-serif';
+        nameLabel.style.color = '#e7e6eb';
+        nameLabel.style.fontSize = '16px';
+
+        const anonymityContainer = document.createElement('div');
+        const anonymityCheckbox = document.createElement('input');
+        anonymityCheckbox.type = 'checkbox';
+        anonymityCheckbox.id = 'anonymity-' + itemName.replace(/\s+/g, '-');
+
+        const anonymityLabel = document.createElement('label');
+        anonymityLabel.htmlFor = anonymityCheckbox.id;
+        anonymityLabel.textContent = 'Anonymous Review';
+        anonymityLabel.className = 'review-anonymity-checkbox';
+
+        anonymityContainer.appendChild(anonymityCheckbox);
+        anonymityContainer.appendChild(anonymityLabel);
+
+        const nameInput = document.createElement('input');
+        nameInput.className = 'review-name-input';
+        nameInput.type = 'text';
+        nameInput.placeholder = 'Enter Name';
+        nameInput.style.border = '2px solid #384151';
+        nameInput.style.borderRadius = '10px';
+        nameInput.style.backgroundColor = '#1a1a1a';
+        nameInput.style.color = '#e7e6eb';
+        nameInput.style.padding = '8px';
+        nameInput.style.fontFamily = '"Montserrat", sans-serif';
+        nameInput.style.fontSize = '16px';
+        nameInput.style.height = '37.5px';
+
+        anonymityCheckbox.addEventListener('change', () => {
+            nameInput.disabled = anonymityCheckbox.checked;
+        });
+
+        nameHeader.appendChild(nameLabel);
+        nameHeader.appendChild(anonymityContainer);
+        nameSection.appendChild(nameHeader);
+        nameSection.appendChild(nameInput);
+
+        const ratingSection = document.createElement('div');
+        ratingSection.className = 'review-rating-section';
+
+        const ratingHeader = document.createElement('div');
+        ratingHeader.className = 'review-rating-header';
+
+        const ratingLabel = document.createElement('label');
+        ratingLabel.className = 'review-rating-label';
+        ratingLabel.textContent = 'Rating';
+        ratingLabel.style.fontFamily = '"Montserrat", sans-serif';
+        ratingLabel.style.color = '#e7e6eb';
+        ratingLabel.style.fontSize = '16px';
+
+        const ratingStars = document.createElement('div');
+        ratingStars.className = 'review-rating-stars';
+
+        let currentRating = 0;
+        const stars = [];
+        for (let i = 1; i <= 5; i++) {
+            const star = document.createElement('span');
+            star.className = 'review-star';
+            star.textContent = '★';
+            star.dataset.value = i;
+            stars.push(star);
+            ratingStars.appendChild(star);
+        }
+        stars.forEach((star, index) => {
+            star.addEventListener('click', () => {
+                const newRating = parseInt(star.dataset.value);
+                animateStars(currentRating, newRating);
+                currentRating = newRating; // Update current rating after animation
+            });
+        });
+
+        function animateStars(oldRating, newRating) {
+            const start = Math.min(oldRating, newRating);
+            const end = Math.max(oldRating, newRating);
+            const increasing = newRating > oldRating;
+
+            // Update all stars up to newRating instantly to reflect the current state
+            stars.forEach((s, i) => {
+                if (i < newRating) {
+                    s.classList.add('active');
+                } else {
+                    s.classList.remove('active');
+                }
+            });
+
+            // Animate only the stars that are changing
+            for (let i = start; i < end; i++) {
+                const delay = (Math.abs(i - (oldRating - 1))) * 100; // Sequential delay
+                setTimeout(() => {
+                    if (increasing) {
+                        stars[i].classList.add('active');
+                    } else {
+                        stars[i].classList.remove('active');
+                    }
+                }, delay);
+            }
+        }
+
+        ratingHeader.appendChild(ratingLabel);
+        ratingSection.appendChild(ratingHeader);
+        ratingSection.appendChild(ratingStars);
+
+        reviewHeader.appendChild(nameSection);
+        reviewHeader.appendChild(ratingSection);
+
+        const descSection = document.createElement('div');
+        descSection.className = 'review-desc-section';
+
+        const descLabel = document.createElement('label');
+        descLabel.className = 'review-desc-label';
+        descLabel.textContent = 'Description';
+        descLabel.style.fontFamily = '"Montserrat", sans-serif';
+        descLabel.style.color = '#e7e6eb';
+        descLabel.style.fontSize = '16px';
+        descLabel.style.display = 'block';
+        descLabel.style.marginBottom = '10px';
+
+        const descCounter = document.createElement('span');
+        descCounter.className = 'review-desc-counter';
+        descCounter.textContent = '0/400';
+        descCounter.style.position = 'absolute';
+        descCounter.style.top = '5px';
+        descCounter.style.right = '5px';
+        descCounter.style.color = '#888';
+        descCounter.style.fontFamily = '"Montserrat", sans-serif';
+        descCounter.style.fontSize = '14px';
+
+        const descInput = document.createElement('textarea');
+        descInput.className = 'review-desc-input';
+        descInput.placeholder = 'Enter Description';
+        descInput.style.border = '2px solid #384151';
+        descInput.style.borderRadius = '16px';
+        descInput.style.backgroundColor = '#1a1a1a';
+        descInput.style.color = '#e7e6eb';
+        descInput.style.padding = '8px';
+        descInput.style.fontFamily = '"Montserrat", sans-serif';
+        descInput.style.fontSize = '16px';
+        descInput.style.height = '187.5px';
+        descInput.style.resize = 'none';
+        descInput.maxLength = 400;
+
+        descInput.addEventListener('input', () => {
+            descCounter.textContent = `${descInput.value.length}/400`;
+            if (descInput.value.length >= 400) {
+                descCounter.style.color = '#cc3333';
+            } else {
+                descCounter.style.color = '#888';
+            }
+        });
+
+        descSection.style.position = 'relative';
+        descSection.appendChild(descLabel);
+        descSection.appendChild(descCounter);
+        descSection.appendChild(descInput);
+
+        const submitButton = document.createElement('button');
+        submitButton.className = 'review-submit-button';
+        const spanItem = document.createElement('span');
+        spanItem.textContent = 'Submit';
+        const stripDiv = document.createElement('div');
+        stripDiv.className = 'strip';
+        submitButton.appendChild(spanItem);
+        submitButton.appendChild(stripDiv);
+
+        submitButton.addEventListener('click', () => {
+            const name = nameInput.value.trim();
+            const desc = descInput.value.trim();
+            if (!anonymityCheckbox.checked && !name) {
+                createNotification(false, '', 'Name is a Required field');
+            } else if (!desc) {
+                createNotification(false, '', 'Description is a Required field');
+            } else if (currentRating === 0) {
+                createNotification(false, '', 'Rating is a Required field');
+            } else {
+                const finalValue = sendReviewToDB(name, desc, currentRating);                
+                if(finalValue) {
+                    createNotification(true, 'Review');
+                    closeModal();
+                } else {
+                    createNotification(false, 'Review');
+                    closeModal();
+                }
+            }
+        });
+
+        modal.appendChild(closeButton);
+        modal.appendChild(header);
+        modal.appendChild(typeEl);
+        modal.appendChild(reviewHeader);
+        modal.appendChild(descSection);
+        modal.appendChild(submitButton);
+
+        return modal;
+    }
 
     function createBox(item) {
         const smallBox = document.createElement('div');
@@ -228,6 +466,18 @@ document.addEventListener('DOMContentLoaded', function () {
         reviewButton.append(spanItem);
         reviewButton.append(stripDiv);
 
+        reviewButton.addEventListener('click', () => {
+            const leaveReviewModal = leaveReview(item.Name, item.Parent, item.Type);
+            modalOverlay.appendChild(leaveReviewModal);
+            modalOverlay.style.display = 'block';
+
+            modalOverlay.addEventListener('click', (event) => {
+                if (event.target === modalOverlay) {
+                    closeModal();
+                }
+            });
+        });
+
         const readMoreButton = document.createElement('button');
         readMoreButton.className = 'box-button';
         const spanItem1 = document.createElement('span');
@@ -251,22 +501,45 @@ document.addEventListener('DOMContentLoaded', function () {
         return smallBox;
     }
 
-    function createNotification(isSuccess, type = '') {
+    function createNotification(isSuccess, type = '', moreData = '') {
         const notification = document.createElement('div');
         notification.className = 'notification';
-        if (isSuccess) {
-            notification.classList.add('success');
+        if (type !== 'Review' && moreData === '') {
+            if (isSuccess) {
+                notification.classList.add('success');
+                notification.innerHTML = `
+                    <span class="notification-text">Successfully loaded ${type} items</span>
+                    <button class="notification-close"><i class="fas fa-times"></i></button>
+                    <div class="timer-bar"></div>
+                `;
+            } else {
+                notification.innerHTML = `
+                    <span class="notification-text">Could not load any items</span>
+                    <button class="notification-close"><i class="fas fa-times"></i></button>
+                    <div class="timer-bar"></div>
+                `;
+            }
+        } else if (moreData !== '') {
             notification.innerHTML = `
-                <span class="notification-text">Successfully loaded ${type} items</span>
+                <span class="notification-text">${moreData}</span>
                 <button class="notification-close"><i class="fas fa-times"></i></button>
                 <div class="timer-bar"></div>
             `;
         } else {
-            notification.innerHTML = `
-                <span class="notification-text">Could not load any items</span>
-                <button class="notification-close"><i class="fas fa-times"></i></button>
-                <div class="timer-bar"></div>
-            `;
+            if (isSuccess) {
+                notification.classList.add('success');
+                notification.innerHTML = `
+                    <span class="notification-text">Review Processed!</span>
+                    <button class="notification-close"><i class="fas fa-times"></i></button>
+                    <div class="timer-bar"></div>
+                `;
+            } else {
+                notification.innerHTML = `
+                    <span class="notification-text">Failed to leave Review</span>
+                    <button class="notification-close"><i class="fas fa-times"></i></button>
+                    <div class="timer-bar"></div>
+                `;
+            }
         }
 
         notificationContainer.appendChild(notification);
@@ -346,10 +619,6 @@ document.addEventListener('DOMContentLoaded', function () {
         stripDiv.className = 'strip';
         readReviewsButton.append(spanItem, stripDiv);
 
-        readReviewsButton.addEventListener('click', () => {
-            console.log(`Reading reviews for ${name}`);
-        });
-
         modal.appendChild(closeButton);
         modal.appendChild(header);
         modal.appendChild(typeEl);
@@ -378,7 +647,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (selectedCategory !== 'Categories') {
             filteredData = boxData.filter(item => {
-                if (selectedCategory === "Food Courts/Mess'") {
+                if (selectedCategory === "Food Courts/Mess") {
                     return item.Type === "Food Court / Mess";
                 }
                 return item.Type === selectedCategory;
