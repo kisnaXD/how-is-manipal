@@ -576,17 +576,22 @@
     display: block;
 }
 
+.review-name-label {
+    font-family: "Montserrat", sans-serif;
+    color: #e7e6eb;
+    font-size: 16px;
+}
+
 .review-name-input {
     width: 100%;
     height: 37.5px;
     border: 2px solid #384151;
-    border-radius: 16px;
+    border-radius: 10px;
     background-color: #1a1a1a;
     color: #e7e6eb;
     padding: 8px;
     font-family: "Montserrat", sans-serif;
     font-size: 16px;
-    position: relative;
 }
 
 .review-name-input:disabled {
@@ -603,6 +608,14 @@
     margin: 10px 0;
 }
 
+.review-desc-label {
+    font-family: "Montserrat", sans-serif;
+    color: #e7e6eb;
+    font-size: 16px;
+    display: block;
+    margin-bottom: 10px;
+}
+
 .review-desc-input {
     width: 100%;
     height: 187.5px;
@@ -614,7 +627,6 @@
     font-family: "Montserrat", sans-serif;
     font-size: 16px;
     resize: none;
-    position: relative;
 }
 
 .review-desc-counter {
@@ -624,6 +636,10 @@
     color: #888;
     font-family: "Montserrat", sans-serif;
     font-size: 14px;
+}
+
+.review-desc-counter.max-length {
+    color: #cc3333;
 }
 
 .review-submit-button {
@@ -676,6 +692,7 @@
 .review-desc-input:focus {
     outline: none;
     border: none;
+    position: relative;
 }
 
 .review-name-input:focus::before,
@@ -726,6 +743,12 @@ input[type="checkbox"]:checked::after {
     font-size: 12px;
 }
 
+.review-rating-label {
+    font-family: "Montserrat", sans-serif;
+    color: #e7e6eb;
+    font-size: 16px;
+}
+
 .review-rating-stars {
     display: flex;
     gap: 5px;
@@ -749,4 +772,34 @@ input[type="checkbox"]:checked::after {
     100% {
         background-position: -100% 0;
     }
+}
+
+.floating-text {
+    position: absolute;
+    color: #ffffff;
+    font-family: "Space Mono", serif;
+    font-size: 18px;
+    z-index: 2100;
+    pointer-events: auto;
+    white-space: nowrap;
+}
+
+.text-top {
+    top: calc(50% - 350px);
+    left: -400px;
+}
+
+.text-bottom {
+    bottom: calc(50% - 350px);
+    left: -400px;
+}
+
+.floating-link, .floating-link-bottom {
+    color: #ffffff;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.floating-link:hover, .floating-link-bottom:hover {
+    color: #e6e6e6;
 }

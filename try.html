@@ -3,77 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Animated Hover Button</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-
-        .fancy-button {
-            position: relative;
-            padding: 12px 24px;
-            background-color: #000;
-            color: #fff;
-            font-family: "Montserrat", sans-serif;
-            font-size: 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            overflow: hidden;
-            transition: transform 0.3s ease;
-        }
-
-        .fancy-button:hover {
-            transform: scale(1.15);
-        }
-
-        .fancy-button span {
-            position: relative;
-            z-index: 2;
-            transition: color 0.3s ease;
-        }
-
-        .strip {
-            position: absolute;
-            top: 50%;
-            left: -100%; /* Start off-screen */
-            width: 150%; /* Wide enough to cover the button diagonally */
-            height: 4px; /* Thin strip */
-            background-color: #fff;
-            transform: rotate(-45deg); /* Inclined strip */
-            transform-origin: center;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .fancy-button:hover .strip {
-            animation: moveStrip 0.6s linear forwards;
-        }
-
-        /* Animation for the strip */
-        @keyframes moveStrip {
-            0% {
-                left: -100%;
-            }
-            100% {
-                left: 100%;
-            }
-        }
-    </style>
+    <title>Privacy Policy</title>
+    <link rel="stylesheet" href="privacy.css">
 </head>
 <body>
-    <button class="fancy-button">
-        <span>Hover Me</span>
-        <div class="strip"></div>
-    </button>
+    <div class="container">
+        <h1>Privacy Policy</h1>
+        <p><strong>Last Updated:</strong> March 05, 2025</p>
 
-    <script>
-        // No JavaScript needed for this effect; it's all CSS-driven
-    </script>
+        <section>
+            <h2>1. Introduction</h2>
+            <p>HowIsManipal Inc. operates HowIsManipal, a platform for reviewing aspects of the Manipal main campus. This Privacy Policy outlines how we handle your personal information.</p>
+        </section>
+
+        <section>
+            <h2>2. Information Collection</h2>
+            <p>We collect information you provide when submitting reviews, such as your name (optional) and review content. If you choose anonymity, no identifying information is linked to your review. We also collect usage data like IP addresses and browser details.</p>
+        </section>
+
+        <section>
+            <h2>3. Use of Information</h2>
+            <p>Your information is used to display reviews on HowIsManipal, improve our platform, and ensure compliance with our Terms and Conditions. Anonymous reviews are not tied to your identity.</p>
+        </section>
+
+        <section>
+            <h2>4. Sharing Information</h2>
+            <p>We do not share your personal information with third parties unless required by law or to protect the integrity of HowIsManipal. Anonymous reviews remain untraceable to individuals.</p>
+        </section>
+
+        <section>
+            <h2>5. Content Guidelines</h2>
+            <p>When submitting reviews, you must avoid vulgar, abusive, or offensive language. We may use your submitted content to monitor compliance but will not disclose your identity if you choose anonymity.</p>
+        </section>
+
+        <section>
+            <h2>6. Security</h2>
+            <p>We take steps to secure your data against unauthorized access, but no system is completely immune. Anonymous reviews are stored without personal identifiers.</p>
+        </section>
+
+        <section>
+            <h2>7. Your Choices</h2>
+            <p>You may request deletion of your reviews or personal data by contacting us. Note that anonymous reviews cannot be linked back to you for removal unless you provide proof of submission.</p>
+        </section>
+
+        <section>
+            <h2>8. Updates</h2>
+            <p>We may revise this Privacy Policy as needed. Updates will be posted here, effective upon publication.</p>
+        </section>
+
+        <section>
+            <h2>9. Contact Us</h2>
+            <p>For privacy-related inquiries, reach out to: <a href="mailto:info@howismanipal.com">info@howismanipal.com</a>.</p>
+        </section>
+    </div>
 </body>
 </html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms and Conditions</title>
+    <link rel="stylesheet" href="termsStyling.css">
+</head>
+<body>
+    <div class="container">
+        <button class="dark-mode-toggle" onclick="toggleDarkMode()">Dark Mode</button>
+        <h1>Terms and Conditions</h1>
+        <p class="last-updated"><strong>Last Updated:</strong> March 05, 2025</p>
+
+        <section>
+            <h2>1. Acceptance of Terms</h2>
+            <p>By accessing or using HowIsManipal, you agree to comply with these Terms and Conditions. If you do not agree, you must refrain from using this website.</p>
+        </section>
+
+        <section>
+            <h2>2. Purpose of <span class="bold">How Is Manipal</span></h2>
+            <p><span class="bold">How Is Manipal</span> is a platform where users can leave reviews for various aspects of the Manipal main campus, including hostels, food courts, academic blocks, services, and more.</p>
+        </section>
+
+        <section>
+            <h2>3. User Conduct</h2>
+            <p>You may submit reviews with your name or anonymously. However, all reviews must be respectful and free from vulgar, abusive, or offensive language. HowIsManipal Inc. reserves the right to remove any content that violates this policy.</p>
+        </section>
+
+        <section>
+            <h2>4. Intellectual Property</h2>
+            <p>All content on HowIsManipal, including the website design, text, and user interface, is owned by HowIsManipal Inc. and protected by copyright laws. User-submitted reviews remain the property of their authors but are licensed to HowIsManipal for display purposes.</p>
+        </section>
+
+        <section>
+            <h2>5. Liability</h2>
+            <p><span class="bold">How Is Manipal</span> Inc. is not responsible for the accuracy or reliability of user-submitted reviews. We provide this platform "as is" and are not liable for any damages resulting from its use.</p>
+        </section>
+
+        <section>
+            <h2>6. Moderation and Removal</h2>
+            <p>We may moderate or remove reviews that violate these terms, including those containing inappropriate language or false information, at our sole discretion.</p>
+        </section>
+
+        <section>
+            <h2>7. Modifications</h2>
+            <p><span class="bold">How Is Manipal</span> Inc. may update these Terms and Conditions at any time. Continued use of the website after changes constitutes acceptance of the updated terms.</p>
+        </section>
+
+        <section>
+            <h2>8. Contact Us</h2>
+            <p>For questions or concerns about these Terms and Conditions, please email us at: <a href="mailto:info@howismanipal.com">info@howismanipal.com</a>.</p>
+        </section>
+    </div>
+
+    <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const button = document.querySelector('.dark-mode-toggle');
+            button.textContent = document.body.classList.contains('dark-mode') ? 'Light Mode' : 'Dark Mode';
+        }
+    </script>
+</body>
+</html>

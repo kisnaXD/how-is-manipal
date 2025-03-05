@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', function () {
     logo.addEventListener('click', () => {
         window.location.href = 'index.html';
     });
-
     const dropdownContainer = document.querySelector('.dropdown-container');
     const dropdownButton = document.querySelector('.dropdown-button');
     const dropdown = document.querySelector('.dropdown');
@@ -128,64 +127,94 @@ document.addEventListener('DOMContentLoaded', function () {
         createWindLines();
     });
 
-    const boxData = [
-        {
-            Name: "Block 16",
-            Parent: "MAHE",
-            Type: "Boys Hostel Block",
-            Image: "https://freshersmit.wordpress.com/wp-content/uploads/2015/05/rsz_hostels.jpg?w=1080",
-            Description: "A Hostel Block primarily occupied by male freshers, sitting right in front of FC2, is not very different from Block 17 apart from the fact that it has a lot lesser number of single rooms"
-        },
-        {
-            Name: "Block 17",
-            Parent: "MAHE",
-            Type: "Boys Hostel Block",
-            Image: "https://upload.wikimedia.org/wikipedia/commons/0/04/Mithostels.jpg",
-            Description: "A Hostel Block primarily occupied by male freshers, sitting right in front of FC2. The occupants here think that their night canteen is the best (they're wrong)."
-        },
-        {
-            Name: "Block 18",
-            Parent: "MAHE",
-            Type: "Boys Hostel Block",
-            Image: "https://via.placeholder.com/150",
-            Description: "A Hostel Block primarily occupied by male seniors, this block is infamous for having all the druggies and nashedis of the campus."
-        },
-        {
-            Name: "Block 19",
-            Parent: "MAHE",
-            Type: "Boys Hostel Block",
-            Image: "https://via.placeholder.com/150",
-            Description: "Another Hostel Block primarily occupied by male seniors, sitting right beside block 18. This block is not very different from Block 18, and is equally infamous for housing all the druggies."
-        },
-        {
-            Name: "Block 20",
-            Parent: "MAHE",
-            Type: "Boys Hostel Block",
-            Image: "https://via.placeholder.com/150",
-            Description: "A Hostel Block primarily occupied by male seniors, is famous for all the wrong reasons. This block is the farthest from academic blocks, making living here a big hassle."
-        },
-        {
-            Name: "FC 2",
-            Parent: "The Indian Kitchen",
-            Type: "Food Court / Mess",
-            Image: "https://via.placeholder.com/150",
-            Description: "Some call Food Court 2 the best mess/food court within the campus, while some hate it for being so far inside."
-        },
-        {
-            Name: "FC 1",
-            Parent: "The Indian Kitchen",
-            Type: "Food Court / Mess",
-            Image: "https://via.placeholder.com/150",
-            Description: "Some call Food Court 2 the best mess/food court within the campus, while some hate it for being so far inside."
-        }
-    ];
-    let isInitialLoad = true;
     const bigBox = document.getElementById('bigBox');
     const showMore = document.getElementById('showMore');
     const notificationContainer = document.getElementById('notification-container');
     const modalOverlay = document.getElementById('modal-overlay');
     let visibleItems = 6;
     const itemsPerLoad = 6;
+    let isInitialLoad = true;
+
+    async function fetchData(category) {
+        try {
+            let url = 'http://localhost:3000/api/items';
+            if (category !== 'Categories') {
+                const typeMap = {
+                    'Boys Hostel Block': 'Boys Hostel Block',
+                    'Girls Hostel Block': 'Girls Hostel Block',
+                    'Food Courts/Mess': 'Food Court',
+                    'Academic Block': 'Academic Block',
+                    'Service': 'Service',
+                    'Medical Service': 'Medical Service',
+                    'Professors': 'Professors',
+                    'Restaurants': 'Restaurants'
+                };
+                const mappedType = typeMap[category];
+                if (mappedType) {
+                    url = `http://localhost:3000/api/items/type/${encodeURIComponent(mappedType)}`;
+                }
+            }
+            console.log(`Fetching data from: ${url}`);
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            if (!response.ok) {
+                throw new Error(`Server responded with status: ${response.status} - ${response.statusText}`);
+            }
+            const data = await response.json();
+            console.log('Fetched data:', data);
+            return Array.isArray(data) ? data : [data];
+        } catch (error) {
+            console.error('Error fetching data:', error.message, error.stack);
+            return [];
+        }
+    }
+
+    function createFloatingText(text, position) {
+        const textElement = document.createElement('div');
+        textElement.className = 'floating-text';
+        textElement.innerHTML = text.replace(
+            position === 'top' ? 'Terms and Conditions' : 'Privacy Policy',
+            position === 'top' 
+                ? '<a href="./terms.html" class="floating-link">Terms and Conditions</a>' 
+                : '<a href="./privacy.html" class="floating-link-bottom">Privacy Policy</a>'
+        );
+        if (position === 'bottom') {
+            textElement.classList.add('text-bottom');
+        } else {
+            textElement.classList.add('text-top');
+        }
+        modalOverlay.appendChild(textElement);
+
+        const randomDuration = (8000 + Math.random() * 4000) * 2;
+        animateFloatingText(textElement, randomDuration);
+        return textElement;
+    }
+
+    function animateFloatingText(textElement, duration) {
+        const startTime = performance.now();
+        const startLeft = -400;
+        const distance = windowWidth + 800;
+        const durationMs = duration;
+
+        function step(timestamp) {
+            const elapsed = timestamp - startTime;
+            const progress = elapsed / durationMs;
+            if (progress < 1) {
+                const currentLeft = startLeft + (progress * distance);
+                textElement.style.left = `${currentLeft}px`;
+                requestAnimationFrame(step);
+            } else {
+                textElement.style.left = `${-400}px`;
+                animateFloatingText(textElement, duration);
+            }
+        }
+
+        requestAnimationFrame(step);
+    }
 
     function leaveReview(itemName, itemParent, itemType) {
         const modal = document.createElement('div');
@@ -228,9 +257,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const nameLabel = document.createElement('label');
         nameLabel.className = 'review-name-label';
         nameLabel.textContent = 'Name';
-        nameLabel.style.fontFamily = '"Montserrat", sans-serif';
-        nameLabel.style.color = '#e7e6eb';
-        nameLabel.style.fontSize = '16px';
 
         const anonymityContainer = document.createElement('div');
         const anonymityCheckbox = document.createElement('input');
@@ -249,14 +275,6 @@ document.addEventListener('DOMContentLoaded', function () {
         nameInput.className = 'review-name-input';
         nameInput.type = 'text';
         nameInput.placeholder = 'Enter Name';
-        nameInput.style.border = '2px solid #384151';
-        nameInput.style.borderRadius = '10px';
-        nameInput.style.backgroundColor = '#1a1a1a';
-        nameInput.style.color = '#e7e6eb';
-        nameInput.style.padding = '8px';
-        nameInput.style.fontFamily = '"Montserrat", sans-serif';
-        nameInput.style.fontSize = '16px';
-        nameInput.style.height = '37.5px';
 
         anonymityCheckbox.addEventListener('change', () => {
             nameInput.disabled = anonymityCheckbox.checked;
@@ -276,9 +294,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const ratingLabel = document.createElement('label');
         ratingLabel.className = 'review-rating-label';
         ratingLabel.textContent = 'Rating';
-        ratingLabel.style.fontFamily = '"Montserrat", sans-serif';
-        ratingLabel.style.color = '#e7e6eb';
-        ratingLabel.style.fontSize = '16px';
 
         const ratingStars = document.createElement('div');
         ratingStars.className = 'review-rating-stars';
@@ -297,7 +312,7 @@ document.addEventListener('DOMContentLoaded', function () {
             star.addEventListener('click', () => {
                 const newRating = parseInt(star.dataset.value);
                 animateStars(currentRating, newRating);
-                currentRating = newRating; // Update current rating after animation
+                currentRating = newRating;
             });
         });
 
@@ -306,7 +321,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const end = Math.max(oldRating, newRating);
             const increasing = newRating > oldRating;
 
-            // Update all stars up to newRating instantly to reflect the current state
             stars.forEach((s, i) => {
                 if (i < newRating) {
                     s.classList.add('active');
@@ -315,9 +329,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
-            // Animate only the stars that are changing
             for (let i = start; i < end; i++) {
-                const delay = (Math.abs(i - (oldRating - 1))) * 100; // Sequential delay
+                const delay = (Math.abs(i - (oldRating - 1))) * 100;
                 setTimeout(() => {
                     if (increasing) {
                         stars[i].classList.add('active');
@@ -341,46 +354,25 @@ document.addEventListener('DOMContentLoaded', function () {
         const descLabel = document.createElement('label');
         descLabel.className = 'review-desc-label';
         descLabel.textContent = 'Description';
-        descLabel.style.fontFamily = '"Montserrat", sans-serif';
-        descLabel.style.color = '#e7e6eb';
-        descLabel.style.fontSize = '16px';
-        descLabel.style.display = 'block';
-        descLabel.style.marginBottom = '10px';
 
         const descCounter = document.createElement('span');
         descCounter.className = 'review-desc-counter';
         descCounter.textContent = '0/400';
-        descCounter.style.position = 'absolute';
-        descCounter.style.top = '5px';
-        descCounter.style.right = '5px';
-        descCounter.style.color = '#888';
-        descCounter.style.fontFamily = '"Montserrat", sans-serif';
-        descCounter.style.fontSize = '14px';
 
         const descInput = document.createElement('textarea');
         descInput.className = 'review-desc-input';
         descInput.placeholder = 'Enter Description';
-        descInput.style.border = '2px solid #384151';
-        descInput.style.borderRadius = '16px';
-        descInput.style.backgroundColor = '#1a1a1a';
-        descInput.style.color = '#e7e6eb';
-        descInput.style.padding = '8px';
-        descInput.style.fontFamily = '"Montserrat", sans-serif';
-        descInput.style.fontSize = '16px';
-        descInput.style.height = '187.5px';
-        descInput.style.resize = 'none';
         descInput.maxLength = 400;
 
         descInput.addEventListener('input', () => {
             descCounter.textContent = `${descInput.value.length}/400`;
             if (descInput.value.length >= 400) {
-                descCounter.style.color = '#cc3333';
+                descCounter.classList.add('max-length');
             } else {
-                descCounter.style.color = '#888';
+                descCounter.classList.remove('max-length');
             }
         });
 
-        descSection.style.position = 'relative';
         descSection.appendChild(descLabel);
         descSection.appendChild(descCounter);
         descSection.appendChild(descInput);
@@ -404,8 +396,8 @@ document.addEventListener('DOMContentLoaded', function () {
             } else if (currentRating === 0) {
                 createNotification(false, '', 'Rating is a Required field');
             } else {
-                const finalValue = sendReviewToDB(name, desc, currentRating);                
-                if(finalValue) {
+                const finalValue = sendReviewToDB(itemName, name, desc, currentRating, anonymityCheckbox.checked);
+                if (finalValue) {
                     createNotification(true, 'Review');
                     closeModal();
                 } else {
@@ -422,7 +414,32 @@ document.addEventListener('DOMContentLoaded', function () {
         modal.appendChild(descSection);
         modal.appendChild(submitButton);
 
+        const topText = createFloatingText("Go through our Terms and Conditions", 'top');
+        const bottomText = createFloatingText("Read our Privacy Policy here", 'bottom');
+
         return modal;
+    }
+
+    async function sendReviewToDB(itemName, name, desc, rating, isAnonymous) {
+        try {
+            const response = await fetch('http://localhost:3000/api/reviews', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    itemName,
+                    name: isAnonymous ? 'Anonymous' : name,
+                    description: desc,
+                    rating,
+                    timestamp: new Date().toISOString()
+                })
+            });
+            return response.ok;
+        } catch (error) {
+            console.error('Error submitting review:', error);
+            return false;
+        }
     }
 
     function createBox(item) {
@@ -435,24 +452,24 @@ document.addEventListener('DOMContentLoaded', function () {
         const titleSection = document.createElement('div');
         const title = document.createElement('h3');
         title.className = 'box-title';
-        title.textContent = item.Name;
+        title.textContent = item.name;
         const type = document.createElement('p');
         type.className = 'box-type';
-        type.textContent = item.Type;
+        type.textContent = item.type;
         titleSection.appendChild(title);
         titleSection.appendChild(type);
 
         const parent = document.createElement('p');
         parent.className = 'box-parent';
-        parent.textContent = item.Parent;
+        parent.textContent = item.parent;
 
         header.appendChild(titleSection);
         header.appendChild(parent);
 
         const image = document.createElement('img');
         image.className = 'box-image';
-        image.src = item.Image || 'https://via.placeholder.com/150';
-        image.alt = item.Name;
+        image.src = item.image || 'https://via.placeholder.com/150';
+        image.alt = item.name;
 
         const buttonContainer = document.createElement('div');
         buttonContainer.className = 'button-container';
@@ -467,7 +484,7 @@ document.addEventListener('DOMContentLoaded', function () {
         reviewButton.append(stripDiv);
 
         reviewButton.addEventListener('click', () => {
-            const leaveReviewModal = leaveReview(item.Name, item.Parent, item.Type);
+            const leaveReviewModal = leaveReview(item.name, item.parent, item.type);
             modalOverlay.appendChild(leaveReviewModal);
             modalOverlay.style.display = 'block';
 
@@ -543,7 +560,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         notificationContainer.appendChild(notification);
-
         notification.style.animation = 'slideIn 0.5s ease forwards';
 
         const timer = setTimeout(() => {
@@ -573,7 +589,7 @@ document.addEventListener('DOMContentLoaded', function () {
         modalOverlay.innerHTML = '';
     }
 
-    function createModal(name, parent, type, image2, description) {
+    function createModal(name, parent, type, image, description) {
         const modal = document.createElement('div');
         modal.className = 'modal';
 
@@ -604,7 +620,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const imageEl = document.createElement('img');
         imageEl.className = 'modal-image';
-        imageEl.src = image2;
+        imageEl.src = image;
         imageEl.alt = name;
 
         const descriptionEl = document.createElement('p');
@@ -617,7 +633,8 @@ document.addEventListener('DOMContentLoaded', function () {
         spanItem.textContent = 'Read Reviews \u2192';
         const stripDiv = document.createElement('div');
         stripDiv.className = 'strip';
-        readReviewsButton.append(spanItem, stripDiv);
+        readReviewsButton.append(spanItem);
+        readReviewsButton.append(stripDiv);
 
         modal.appendChild(closeButton);
         modal.appendChild(header);
@@ -630,7 +647,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showModal(item) {
-        const modal = createModal(item.Name, item.Parent, item.Type, item.Image, item.Description);
+        const modal = createModal(item.name, item.parent, item.type, item.image, item.desc);
         modalOverlay.appendChild(modal);
         modalOverlay.style.display = 'block';
 
@@ -641,32 +658,20 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    function loadData() {
+    async function loadData() {
         bigBox.innerHTML = '';
-        let filteredData = boxData;
-
-        if (selectedCategory !== 'Categories') {
-            filteredData = boxData.filter(item => {
-                if (selectedCategory === "Food Courts/Mess") {
-                    return item.Type === "Food Court / Mess";
-                }
-                return item.Type === selectedCategory;
-            });
-
-            if (filteredData.length === 0) {
-                filteredData = boxData;
-                dropdownButton.innerHTML = `Categories <i class="fas fa-caret-down"></i>`;
-                selectedCategory = 'Categories';
-                createNotification(false);
-            } else {
-                createNotification(true, filteredData[0].Type);
-            }
-        } else if (!isInitialLoad) {
-            createNotification(true, "all");
+        let filteredData = await fetchData(selectedCategory);
+        if (filteredData.length === 0 && selectedCategory !== 'Categories') {
+            createNotification(false, '', `No items found for "${selectedCategory}"`);
+            dropdownButton.innerHTML = `Categories <i class="fas fa-caret-down"></i>`;
+            selectedCategory = 'Categories';
+            filteredData = await fetchData('Categories');
+        } else if (!isInitialLoad && filteredData.length > 0) {
+            createNotification(true, selectedCategory === 'Categories' ? 'all' : filteredData[0].type);
         }
 
         visibleItems = 6;
-        showMore.style.display = 'flex';
+        showMore.style.display = filteredData.length > visibleItems ? 'flex' : 'none';
 
         for (let i = 0; i < Math.min(visibleItems, filteredData.length); i++) {
             bigBox.appendChild(createBox(filteredData[i]));
