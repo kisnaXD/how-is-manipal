@@ -56,6 +56,9 @@ app.get('/api/items/type/:type', async (req, res) => {
         const items = await collection.find({ type: itemType }).toArray();
         if (items.length > 0) {
             res.status(200).json(items);
+            items.forEach(item => {
+                console.log(item.name)
+            })
         } else {
             res.status(404).json({ error: `No items found for type '${itemType}'` });
         }

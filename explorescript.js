@@ -3,56 +3,9 @@ document.addEventListener('DOMContentLoaded', function () {
     logo.addEventListener('click', () => {
         window.location.href = 'index.html';
     });
-    const dropdownContainer = document.querySelector('.dropdown-container');
-    const dropdownButton = document.querySelector('.dropdown-button');
-    const dropdown = document.querySelector('.dropdown');
-    const dropdownItems = document.querySelectorAll('.dropdown-item a');
-    let hideTimeout;
-    let selectedCategory = 'Categories';
 
-    dropdownButton.addEventListener('click', function (event) {
-        event.stopPropagation();
-        dropdownContainer.classList.toggle('active');
-        dropdown.classList.toggle('open');
-        adjustDropdownWidth();
-    });
-
-    document.addEventListener('click', function (event) {
-        if (!dropdownContainer.contains(event.target)) {
-            closeDropdown();
-        }
-    });
-
-    dropdownContainer.addEventListener('mouseleave', function () {
-        hideTimeout = setTimeout(closeDropdown, 300);
-    });
-
-    dropdownContainer.addEventListener('mouseenter', function () {
-        clearTimeout(hideTimeout);
-    });
-
-    dropdownItems.forEach(item => {
-        item.addEventListener('click', function (event) {
-            event.preventDefault();
-            dropdownButton.innerHTML = `${this.innerText} <i class="fas fa-caret-down"></i>`;
-            selectedCategory = this.innerText;
-            closeDropdown();
-            loadData();
-        });
-    });
-
-    function closeDropdown() {
-        dropdown.classList.remove('open');
-        dropdownContainer.classList.remove('active');
-    }
-
-    function adjustDropdownWidth() {
-        dropdown.style.minWidth = `${dropdownButton.offsetWidth}px`;
-    }
-
-    adjustDropdownWidth();
-    window.addEventListener('resize', adjustDropdownWidth);
-
+    let i = 1;
+    const filterButton = document.querySelector('.filter-button');
     const container = document.getElementById('weather-container');
     const githubBut = document.getElementById('navbar-socials-1');
     githubBut.addEventListener('click', () => {
@@ -86,8 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function createWindLine(topPosition, leftPosition) {
         const windLine = document.createElement('div');
         windLine.className = 'wind-line';
-        const width = 100 + Math.random() * 150;
-        windLine.style.width = `${width}px`;
+        windLine.style.width = `${100 + Math.random() * 150}px`;
         windLine.style.top = `${topPosition}px`;
         windLine.style.left = `${leftPosition}px`;
         container.appendChild(windLine);
@@ -101,7 +53,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const width = parseFloat(windLine.style.width);
         const distance = windowWidth + width * 2;
         const duration = durationSeconds * 1000;
-
         function step(timestamp) {
             const elapsed = timestamp - startTime;
             const progress = elapsed / duration;
@@ -134,27 +85,198 @@ document.addEventListener('DOMContentLoaded', function () {
     let visibleItems = 6;
     const itemsPerLoad = 6;
     let isInitialLoad = true;
+    let selectedType = 'Categories';
+    let selectedCategory = 'Type';
 
-    async function fetchData(category) {
+    loadData();
+
+    filterButton.addEventListener('click', () => {
+        const filterModal = createFilterModal();
+        modalOverlay.appendChild(filterModal);
+        modalOverlay.style.display = 'block';
+
+        modalOverlay.addEventListener('click', (event) => {
+            if (event.target === modalOverlay) {
+                closeModal();
+            }
+        });
+    });
+
+    function createFilterModal() {
+        const modal = document.createElement('div');
+        modal.className = 'modal-filter';
+    
+        const closeButton = document.createElement('button'); // Changed from 'div' to 'button'
+        closeButton.className = 'modal-close';
+        closeButton.innerHTML = '<i class="fas fa-times"></i>';
+        closeButton.onclick = closeModal;
+    
+        // Rest of the function remains unchanged...
+        const title = document.createElement('h2');
+        title.className = 'filter-title';
+        title.textContent = 'Filter';
+    
+        const filterContainer = document.createElement('div');
+        filterContainer.className = 'filter-container';
+    
+        const leftSection = document.createElement('div');
+        leftSection.className = 'filter-left-section';
+    
+        const categories = ['Type', 'Parent', 'Nearby'];
+        const categoryDivs = {};
+        categories.forEach(category => {
+            const categoryDiv = document.createElement('div');
+            categoryDiv.className = 'filter-category';
+            const categoryHeader = document.createElement('h3');
+            categoryHeader.className = 'filter-category-header';
+            categoryHeader.textContent = category;
+            categoryHeader.addEventListener('click', () => {
+                selectedCategory = category;
+                updateOptionsVisibility();
+            });
+            categoryDiv.appendChild(categoryHeader);
+            leftSection.appendChild(categoryDiv);
+            categoryDivs[category] = categoryDiv;
+            if (category === 'Type') categoryDiv.classList.add('selected');
+        });
+    
+        const rightSection = document.createElement('div');
+        rightSection.className = 'filter-right-section';
+    
+        const typeOptions = document.createElement('div');
+        typeOptions.className = 'filter-options';
+        const typeList = ['Academic Blocks', 'Restaurants', 'Professors', 'Student Clubs', 'Food Courts/Mess', 'Boys Hostel Blocks', 'Girls Hostel Blocks', 'Campus Services'];
+        typeList.forEach(option => {
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'filter-option';
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'filter-type';
+            radio.value = option;
+            radio.id = `filter-${option.replace(/\s+/g, '-')}`;
+            if (selectedType === option) radio.checked = true;
+            const label = document.createElement('label');
+            label.htmlFor = radio.id;
+            label.textContent = option;
+            optionDiv.appendChild(radio);
+            optionDiv.appendChild(label);
+            typeOptions.appendChild(optionDiv);
+        });
+    
+        const parentOptions = document.createElement('div');
+        parentOptions.className = 'filter-options';
+        const parentList = ['MAHE', 'KMC', 'Outside Campus'];
+        parentList.forEach(option => {
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'filter-option';
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'filter-type';
+            radio.value = option;
+            radio.id = `filter-${option.replace(/\s+/g, '-')}`;
+            if (selectedType === option) radio.checked = true;
+            const label = document.createElement('label');
+            label.htmlFor = radio.id;
+            label.textContent = option;
+            optionDiv.appendChild(radio);
+            optionDiv.appendChild(label);
+            parentOptions.appendChild(optionDiv);
+        });
+    
+        const nearbyOptions = document.createElement('div');
+        nearbyOptions.className = 'filter-options';
+        for (let i = 14; i <= 22; i++) {
+            const option = `Block ${i}`;
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'filter-option';
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'filter-type';
+            radio.value = option;
+            radio.id = `filter-${option.replace(/\s+/g, '-')}`;
+            if (selectedType === option) radio.checked = true;
+            const label = document.createElement('label');
+            label.htmlFor = radio.id;
+            label.textContent = option;
+            optionDiv.appendChild(radio);
+            optionDiv.appendChild(label);
+            nearbyOptions.appendChild(optionDiv);
+        }
+    
+        rightSection.appendChild(typeOptions);
+        rightSection.appendChild(parentOptions);
+        rightSection.appendChild(nearbyOptions);
+    
+        parentOptions.classList.add('hidden');
+        nearbyOptions.classList.add('hidden');
+    
+        function updateOptionsVisibility() {
+            typeOptions.classList.add('fade-out');
+            parentOptions.classList.add('fade-out');
+            nearbyOptions.classList.add('fade-out');
+            setTimeout(() => {
+                typeOptions.classList.toggle('hidden', selectedCategory !== 'Type');
+                parentOptions.classList.toggle('hidden', selectedCategory !== 'Parent');
+                nearbyOptions.classList.toggle('hidden', selectedCategory !== 'Nearby');
+                typeOptions.classList.toggle('fade-in', selectedCategory === 'Type');
+                parentOptions.classList.toggle('fade-in', selectedCategory === 'Parent');
+                nearbyOptions.classList.toggle('fade-in', selectedCategory === 'Nearby');
+                categories.forEach(cat => {
+                    categoryDivs[cat].classList.toggle('selected', cat === selectedCategory);
+                });
+            }, 300);
+        }
+    
+        updateOptionsVisibility();
+    
+        filterContainer.appendChild(leftSection);
+        filterContainer.appendChild(rightSection);
+    
+        const applyButton = document.createElement('button');
+        applyButton.className = 'filter-apply-button';
+        applyButton.textContent = 'Apply Filter';
+        applyButton.addEventListener('click', () => {
+            const selectedRadio = document.querySelector('input[name="filter-type"]:checked');
+            if (selectedRadio) {
+                selectedType = selectedRadio.value;
+                loadData();
+            }
+            closeModal();
+        });
+    
+        modal.appendChild(closeButton);
+        modal.appendChild(title);
+        modal.appendChild(filterContainer);
+        modal.appendChild(applyButton);
+    
+        return modal;
+    }
+
+    async function fetchData(type) {
         try {
             let url = 'http://localhost:3000/api/items';
-            if (category !== 'Categories') {
+            if (type !== 'Categories') {
                 const typeMap = {
-                    'Boys Hostel Block': 'Boys Hostel Block',
-                    'Girls Hostel Block': 'Girls Hostel Block',
-                    'Food Courts/Mess': 'Food Court',
-                    'Academic Block': 'Academic Block',
-                    'Service': 'Service',
-                    'Medical Service': 'Medical Service',
+                    'Academic Blocks': 'Academic Block',
+                    'Restaurants': 'Restaurants',
                     'Professors': 'Professors',
-                    'Restaurants': 'Restaurants'
+                    'Student Clubs': 'Student Clubs',
+                    'Food Courts/Mess': 'Food Court',
+                    'Boys Hostel Blocks': 'Boys Hostel Block',
+                    'Girls Hostel Blocks': 'Girls Hostel Block',
+                    'Campus Services': 'Campus Services',
+                    'MAHE': 'MAHE',
+                    'KMC': 'KMC',
+                    'Outside Campus': 'Outside Campus',
+                    'Block 14': 'Block 14', 'Block 15': 'Block 15', 'Block 16': 'Block 16',
+                    'Block 17': 'Block 17', 'Block 18': 'Block 18', 'Block 19': 'Block 19',
+                    'Block 20': 'Block 20', 'Block 21': 'Block 21', 'Block 22': 'Block 22'
                 };
-                const mappedType = typeMap[category];
+                const mappedType = typeMap[type] || type;
                 if (mappedType) {
                     url = `http://localhost:3000/api/items/type/${encodeURIComponent(mappedType)}`;
                 }
             }
-            console.log(`Fetching data from: ${url}`);
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
@@ -165,10 +287,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 throw new Error(`Server responded with status: ${response.status} - ${response.statusText}`);
             }
             const data = await response.json();
-            console.log('Fetched data:', data);
             return Array.isArray(data) ? data : [data];
         } catch (error) {
-            console.error('Error fetching data:', error.message, error.stack);
+            createNotification(false, '', `No items found for "${type}"`);
             return [];
         }
     }
@@ -182,11 +303,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 ? '<a href="./terms.html" class="floating-link">Terms and Conditions</a>' 
                 : '<a href="./privacy.html" class="floating-link-bottom">Privacy Policy</a>'
         );
-        if (position === 'bottom') {
-            textElement.classList.add('text-bottom');
-        } else {
-            textElement.classList.add('text-top');
-        }
+        textElement.classList.add(position === 'bottom' ? 'text-bottom' : 'text-top');
         modalOverlay.appendChild(textElement);
 
         const randomDuration = (8000 + Math.random() * 4000) * 2;
@@ -366,11 +483,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         descInput.addEventListener('input', () => {
             descCounter.textContent = `${descInput.value.length}/400`;
-            if (descInput.value.length >= 400) {
-                descCounter.classList.add('max-length');
-            } else {
-                descCounter.classList.remove('max-length');
-            }
+            descCounter.classList.toggle('max-length', descInput.value.length >= 400);
         });
 
         descSection.appendChild(descLabel);
@@ -560,10 +673,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         notificationContainer.appendChild(notification);
-        notification.style.animation = 'slideIn 0.5s ease forwards';
+        notification.classList.add('slide-in');
 
         const timer = setTimeout(() => {
-            notification.style.animation = 'slideOut 0.5s ease forwards';
+            notification.classList.add('slide-out');
             setTimeout(() => {
                 notification.remove();
             }, 500);
@@ -572,7 +685,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const closeButton = notification.querySelector('.notification-close');
         closeButton.onclick = () => {
             clearTimeout(timer);
-            notification.style.animation = 'slideOut 0.5s ease forwards';
+            notification.classList.add('slide-out');
             setTimeout(() => {
                 notification.remove();
             }, 500);
@@ -659,27 +772,36 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function loadData() {
-        bigBox.innerHTML = '';
-        let filteredData = await fetchData(selectedCategory);
-        if (filteredData.length === 0 && selectedCategory !== 'Categories') {
-            createNotification(false, '', `No items found for "${selectedCategory}"`);
-            dropdownButton.innerHTML = `Categories <i class="fas fa-caret-down"></i>`;
-            selectedCategory = 'Categories';
-            filteredData = await fetchData('Categories');
+        bigBox.innerHTML = ''; // Clear current items
+        const filteredData = await fetchData(selectedType); // Fetch based on current selectedType
+
+        // Handle no results
+        if (filteredData.length === 0 && selectedType !== 'Categories') {
+            createNotification(false, '', `No items found for "${selectedType}"`);
+            selectedType = 'Categories';
+            loadData(); // Recursively load all items
+            return; // Exit this call to avoid duplicate processing
         } else if (!isInitialLoad && filteredData.length > 0) {
-            createNotification(true, selectedCategory === 'Categories' ? 'all' : filteredData[0].type);
+            createNotification(true, selectedType === 'Categories' ? 'all' : filteredData[0].type);
         }
 
-        visibleItems = 6;
+        visibleItems = 6; // Reset visible items
         showMore.style.display = filteredData.length > visibleItems ? 'flex' : 'none';
 
+        // Load initial items
         for (let i = 0; i < Math.min(visibleItems, filteredData.length); i++) {
             bigBox.appendChild(createBox(filteredData[i]));
         }
 
+        // Remove existing listener to prevent stacking
+        showMore.removeEventListener('click', showMore.onclick);
         showMore.onclick = null;
-        showMore.addEventListener('click', () => {
-            const nextItems = filteredData.slice(visibleItems, visibleItems + itemsPerLoad);
+
+        // Attach new listener with current filteredData
+        showMore.addEventListener('click', async function loadMore() {
+            const filteredData2 = await fetchData(selectedType); // Fetch based on current selectedType
+            const nextItems = filteredData2.slice(visibleItems, visibleItems + itemsPerLoad);
+            console.log(nextItems)
             nextItems.forEach(item => {
                 bigBox.appendChild(createBox(item));
             });
@@ -695,6 +817,4 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         isInitialLoad = false;
     }
-
-    loadData();
 });
