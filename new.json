@@ -1,0 +1,16 @@
+[
+    {
+        "name": "Block 21",
+        "parent": "MAHE",
+        "type": "Girls Hostel Block",
+        "desc": "New Ladies Block (NLB), People call it the princess tower. AC/non-AC singles, luxe as hell, near Student Plaza. Five-minute food court dash, 10 to academics—prime location. Kitchenette and privacy? Introvert heaven. Pricey, though—worth it for the flex.",
+        "image": "https://qph.cf2.quoracdn.net/main-qimg-3f8b7e8e8f7e8e8f7e8e8f7e8e8f7e8e.webp"
+    },
+    {
+        "name": "Block 22",
+        "parent": "MAHE",
+        "type": "Girls Hostel Block",
+        "desc": "Newest girls’ block, yellow deluxe vibes. People say it’s posh—AC/non-AC, great furniture, but stuffy in heat. Near Apoorva Mess, 15-minute academic walk. Two batches in, still shiny. Overpriced but cozy.",
+        "image": "https://qph.cf2.quoracdn.net/main-qimg-4f8b7e8e8f7e8e8f7e8e8f7e8e8f7e8e.webp"
+    }
+]

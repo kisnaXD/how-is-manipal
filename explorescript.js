@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const leftSection = document.createElement('div');
         leftSection.className = 'filter-left-section';
     
-        const categories = ['Type', 'Parent', 'Nearby'];
+        const categories = ['Type', 'Parent'];
         const categoryDivs = {};
         categories.forEach(category => {
             const categoryDiv = document.createElement('div');
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
         const typeOptions = document.createElement('div');
         typeOptions.className = 'filter-options';
-        const typeList = ['Academic Blocks', 'Restaurants', 'Professors', 'Student Clubs', 'Food Courts/Mess', 'Boys Hostel Blocks', 'Girls Hostel Blocks', 'Campus Services'];
+        const typeList = ['Academic Blocks', 'Restaurants', 'Professors', 'Student Clubs', 'Food Courts/Mess', 'Boys Hostel Blocks', 'Girls Hostel Blocks', 'Campus Services', 'Courses', 'Events'];
         typeList.forEach(option => {
             const optionDiv = document.createElement('div');
             optionDiv.className = 'filter-option';
@@ -183,44 +183,19 @@ document.addEventListener('DOMContentLoaded', function () {
             parentOptions.appendChild(optionDiv);
         });
     
-        const nearbyOptions = document.createElement('div');
-        nearbyOptions.className = 'filter-options';
-        for (let i = 14; i <= 22; i++) {
-            const option = `Block ${i}`;
-            const optionDiv = document.createElement('div');
-            optionDiv.className = 'filter-option';
-            const radio = document.createElement('input');
-            radio.type = 'radio';
-            radio.name = 'filter-type';
-            radio.value = option;
-            radio.id = `filter-${option.replace(/\s+/g, '-')}`;
-            if (selectedType === option) radio.checked = true;
-            const label = document.createElement('label');
-            label.htmlFor = radio.id;
-            label.textContent = option;
-            optionDiv.appendChild(radio);
-            optionDiv.appendChild(label);
-            nearbyOptions.appendChild(optionDiv);
-        }
-    
         rightSection.appendChild(typeOptions);
         rightSection.appendChild(parentOptions);
-        rightSection.appendChild(nearbyOptions);
     
         parentOptions.classList.add('hidden');
-        nearbyOptions.classList.add('hidden');
     
         function updateOptionsVisibility() {
             typeOptions.classList.add('fade-out');
             parentOptions.classList.add('fade-out');
-            nearbyOptions.classList.add('fade-out');
             setTimeout(() => {
                 typeOptions.classList.toggle('hidden', selectedCategory !== 'Type');
                 parentOptions.classList.toggle('hidden', selectedCategory !== 'Parent');
-                nearbyOptions.classList.toggle('hidden', selectedCategory !== 'Nearby');
                 typeOptions.classList.toggle('fade-in', selectedCategory === 'Type');
                 parentOptions.classList.toggle('fade-in', selectedCategory === 'Parent');
-                nearbyOptions.classList.toggle('fade-in', selectedCategory === 'Nearby');
                 categories.forEach(cat => {
                     categoryDivs[cat].classList.toggle('selected', cat === selectedCategory);
                 });
@@ -257,22 +232,19 @@ document.addEventListener('DOMContentLoaded', function () {
             let url = 'http://localhost:3000/api/items';
             if (type !== 'Categories') {
                 const typeMap = {
-                    'Academic Blocks': 'Academic Block',
+                    'Academic Blocks': 'Academic-Block',
                     'Restaurants': 'Restaurants',
                     'Professors': 'Professors',
-                    'Student Clubs': 'Student Clubs',
-                    'Food Courts/Mess': 'Food Court',
-                    'Boys Hostel Blocks': 'Boys Hostel Block',
-                    'Girls Hostel Blocks': 'Girls Hostel Block',
-                    'Campus Services': 'Campus Services',
-                    'MAHE': 'MAHE',
-                    'KMC': 'KMC',
-                    'Outside Campus': 'Outside Campus',
-                    'Block 14': 'Block 14', 'Block 15': 'Block 15', 'Block 16': 'Block 16',
-                    'Block 17': 'Block 17', 'Block 18': 'Block 18', 'Block 19': 'Block 19',
-                    'Block 20': 'Block 20', 'Block 21': 'Block 21', 'Block 22': 'Block 22'
+                    'Student Clubs': 'Student-Clubs',
+                    'Food Courts/Mess': 'Food-Court',
+                    'Boys Hostel Blocks': 'Boys-Hostel-Blocks',
+                    'Girls Hostel Blocks': 'Girls-Hostel-Blocks',
+                    'Campus Services': 'Campus-Services',
+                    'Events' : 'Events'
                 };
+                console.log(type)
                 const mappedType = typeMap[type] || type;
+                console.log(mappedType)
                 if (mappedType) {
                     url = `http://localhost:3000/api/items/type/${encodeURIComponent(mappedType)}`;
                 }
@@ -288,6 +260,23 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             const data = await response.json();
             return Array.isArray(data) ? data : [data];
+        } catch (error) {
+            createNotification(false, '', `No items found for "${type}"`);
+            return [];
+        }
+    }
+
+    async function fetchRatings(type) {
+        try {
+            let url = `http://localhost:3000/api/ratings/rating/${encodeURIComponent(type)}`;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            const data = await response.json();
+            return data;
         } catch (error) {
             createNotification(false, '', `No items found for "${type}"`);
             return [];
@@ -533,29 +522,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return modal;
     }
 
-    async function sendReviewToDB(itemName, name, desc, rating, isAnonymous) {
-        try {
-            const response = await fetch('http://localhost:3000/api/reviews', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    itemName,
-                    name: isAnonymous ? 'Anonymous' : name,
-                    description: desc,
-                    rating,
-                    timestamp: new Date().toISOString()
-                })
-            });
-            return response.ok;
-        } catch (error) {
-            console.error('Error submitting review:', error);
-            return false;
-        }
-    }
-
-    function createBox(item) {
+    function createBox(item, rating) {
         const smallBox = document.createElement('div');
         smallBox.className = 'small-box';
 
@@ -624,9 +591,23 @@ document.addEventListener('DOMContentLoaded', function () {
         buttonContainer.appendChild(reviewButton);
         buttonContainer.appendChild(readMoreButton);
 
+        const ratingElement = document.createElement('div');
+        ratingElement.className = 'rating-text';
+        if(rating.length === 0) {
+            ratingElement.innerText = 'No Reviews Yet';
+        } else {
+            rating = rating[0]
+            if(rating.reviews === 1) {
+                ratingElement.innerText = `${rating.rating} \u2605 (${rating.reviews} Review)`;
+            } else {
+                ratingElement.innerText = `${rating.rating} \u2605 (${rating.reviews} Reviews)`;
+            }
+        }
+
         smallBox.appendChild(header);
         smallBox.appendChild(image);
         smallBox.appendChild(buttonContainer);
+        smallBox.appendChild(ratingElement);
 
         return smallBox;
     }
@@ -638,7 +619,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (isSuccess) {
                 notification.classList.add('success');
                 notification.innerHTML = `
-                    <span class="notification-text">Successfully loaded ${type} items</span>
+                    <span class="notification-text">Successfully loaded ${type}</span>
                     <button class="notification-close"><i class="fas fa-times"></i></button>
                     <div class="timer-bar"></div>
                 `;
@@ -774,15 +755,15 @@ document.addEventListener('DOMContentLoaded', function () {
     async function loadData() {
         bigBox.innerHTML = ''; // Clear current items
         const filteredData = await fetchData(selectedType); // Fetch based on current selectedType
-
+        isInitialLoad = selectedType === "Categories" ? true : false;
         // Handle no results
         if (filteredData.length === 0 && selectedType !== 'Categories') {
-            createNotification(false, '', `No items found for "${selectedType}"`);
             selectedType = 'Categories';
             loadData(); // Recursively load all items
             return; // Exit this call to avoid duplicate processing
         } else if (!isInitialLoad && filteredData.length > 0) {
             createNotification(true, selectedType === 'Categories' ? 'all' : filteredData[0].type);
+            isInitialLoad = true;
         }
 
         visibleItems = 6; // Reset visible items
@@ -790,7 +771,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Load initial items
         for (let i = 0; i < Math.min(visibleItems, filteredData.length); i++) {
-            bigBox.appendChild(createBox(filteredData[i]));
+            const rating = await fetchRatings(filteredData[i].name);
+            bigBox.appendChild(createBox(filteredData[i], rating));
         }
 
         // Remove existing listener to prevent stacking
@@ -802,19 +784,16 @@ document.addEventListener('DOMContentLoaded', function () {
             const filteredData2 = await fetchData(selectedType); // Fetch based on current selectedType
             const nextItems = filteredData2.slice(visibleItems, visibleItems + itemsPerLoad);
             console.log(nextItems)
-            nextItems.forEach(item => {
-                bigBox.appendChild(createBox(item));
+            nextItems.forEach(item => async function work() {
+                const rating = await fetchRatings(filteredData[i].name);
+                bigBox.appendChild(createBox(item, rating));
             });
             visibleItems += itemsPerLoad;
 
-            if (visibleItems >= filteredData.length) {
+            if (visibleItems >= filteredData2.length) {
                 showMore.style.display = 'none';
             }
         });
-
-        if (filteredData.length <= visibleItems) {
-            showMore.style.display = 'none';
-        }
         isInitialLoad = false;
     }
 });

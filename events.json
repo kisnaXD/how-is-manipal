@@ -1,0 +1,44 @@
+[
+    {
+        "name": "Food Court 1",
+        "parent": "MAHE",
+        "type": "Food Court",
+        "desc": "MIT’s OG food hub, air-conditioned glory. People rave about non-veg days (Mon, Wed, Fri), but veg options? Meh. Opposite Student Plaza, it’s central—Rs. 177/day. Monotonous menu, yet the vibe’s unmatched.",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/8/8f/MIT_Food_Court_1_20211012_130903.jpg"
+    },
+    {
+        "name": "Food Court 2",
+        "parent": "MAHE",
+        "type": "Food Court",
+        "desc": "Downhill savior near 16-17. People love the month-end specials—gajar ka halwa slaps. No AC, hot as hell in summer, but cheap and tasty. Live counter burgers? Yes, please. Girls hate the trek, though.",
+        "image": "https://trcww.in/wp-content/uploads/2024/07/MU-Food-Court-03-1024x683.jpg"
+    },
+    {
+        "name": "Adithya Mess",
+        "parent": "MAHE",
+        "type": "Food Court",
+        "desc": "Boys-only, between Blocks 5-6. People say it’s homely—varied breakfast, non-veg thrice weekly. No AC, sweaty misery in even semesters. Close to hostels, but academic hike sucks.",
+        "image": "https://themitpost.com/wp-content/uploads/2022/03/Adithya-Mess-1024x683.jpg"
+    },
+    {
+        "name": "Annapoorna Mess",
+        "parent": "MAHE",
+        "type": "Food Court",
+        "desc": "Co-ed, near 9-10. People dig the home-cooked feel—non-veg Tue/Thu/Sat. No AC, long walk for girls. Breakfast variety’s a win, but summer heat turns it into a sauna.",
+        "image": "https://themitpost.com/wp-content/uploads/2022/03/Annapoorna-Mess-1024x683.jpg"
+    },
+    {
+        "name": "Apoorva Mess",
+        "parent": "MAHE",
+        "type": "Food Court",
+        "desc": "Block 8’s buddy, co-ed chaos. People love the Oreo milkshake and a la carte—pasta, Maggi, delivered till 11 PM. Non-AC, packed, weekly menu changes. Outdoor seating’s a vibe.",
+        "image": "https://themitpost.com/wp-content/uploads/2022/03/Apoorva-Mess-1024x683.jpg"
+    },
+    {
+        "name": "Sindhi Mess",
+        "parent": "MAHE",
+        "type": "Food Court",
+        "desc": "Co-ed spot near Block 10, People say it’s a hidden gem—simple, Sindhi-style meals with dal-chawal staples. Non-veg rare, no AC, but cheap and filling. Five-minute walk to academics, summer heat’s a killer.",
+        "image": "https://themitpost.com/wp-content/uploads/2022/03/Sindhi-Mess-1024x683.jpg"
+    }
+]
