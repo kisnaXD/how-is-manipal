@@ -67,7 +67,7 @@ app.get('/api/items/type/:type', async (req, res) => {
         const typeMap = {
             'Academic-Block': 'academic-blocks',
             'Restaurants': 'restaurants',
-            'Professors': 'professors',
+            'Clubs': 'clubs',
             'Student-Clubs': 'student-clubs',
             'Food-Court': 'food-courts',
             'Boys-Hostel-Blocks': 'boys-hostel-blocks',

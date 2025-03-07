@@ -3,7 +3,25 @@ document.addEventListener('DOMContentLoaded', function () {
     logo.addEventListener('click', () => {
         window.location.href = 'index.html';
     });
-
+    const staticReviews = [
+        { reviewerName: 'Alice', reviewText: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam veniam placeat magni rem doloribus, reprehenderit tempora quos nihil dignissimos iure tempore recusandae delectus aliquid obcaecati aspernatur itaque nam esse laudantium.', rating: 4.5 },
+        { reviewerName: 'Anonymous', reviewText: 'Decent experience, but could use more amenities.', rating: 4.5 },
+        { reviewerName: 'Bob', reviewText: 'Absolutely loved it! Highly recommend to everyone.', rating: 5 },
+        { reviewerName: 'Charlie', reviewText: 'It’s okay, nothing special but gets the job done.', rating: 3.5 },
+        { reviewerName: 'Diana', reviewText: 'Fantastic facilities and great staff!', rating: 4.8 },
+        { reviewerName: 'Eve', reviewText: 'Could be better, but overall decent.', rating: 3.8 },
+        { reviewerName: 'Frank', reviewText: 'Best place I’ve stayed at in years!', rating: 5 },
+        { reviewerName: 'Grace', reviewText: 'Good value for money, would return.', rating: 4.2 },
+        { reviewerName: 'Hank', reviewText: 'Needs improvement in cleanliness.', rating: 3.0 },
+        { reviewerName: 'Eve', reviewText: 'Could be better, but overall decent.', rating: 3.8 },
+        { reviewerName: 'Frank', reviewText: 'Best place I’ve stayed at in years!', rating: 5 },
+        { reviewerName: 'Grace', reviewText: 'Good value for money, would return.', rating: 4.2 },
+        { reviewerName: 'Hank', reviewText: 'Needs improvement in cleanliness.', rating: 3.0 },
+        { reviewerName: 'Eve', reviewText: 'Could be better, but overall decent.', rating: 3.8 },
+        { reviewerName: 'Frank', reviewText: 'Best place I’ve stayed at in years!', rating: 5 },
+        { reviewerName: 'Grace', reviewText: 'Good value for money, would return.', rating: 4.2 },
+        { reviewerName: 'Hank', reviewText: 'Needs improvement in cleanliness.', rating: 3.0 }
+    ];
     let i = 1;
     const filterButton = document.querySelector('.filter-button');
     const container = document.getElementById('weather-container');
@@ -122,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const leftSection = document.createElement('div');
         leftSection.className = 'filter-left-section';
     
-        const categories = ['Type', 'Parent'];
+        const categories = ['Type', 'Parent', 'Sort By'];
         const categoryDivs = {};
         categories.forEach(category => {
             const categoryDiv = document.createElement('div');
@@ -145,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
         const typeOptions = document.createElement('div');
         typeOptions.className = 'filter-options';
-        const typeList = ['Academic Blocks', 'Restaurants', 'Professors', 'Student Clubs', 'Food Courts/Mess', 'Boys Hostel Blocks', 'Girls Hostel Blocks', 'Campus Services', 'Courses', 'Events'];
+        const typeList = ['Academic Blocks', 'Restaurants', 'Clubs', 'Student Clubs', 'Food Courts/Mess', 'Boys Hostel Blocks', 'Girls Hostel Blocks', 'Campus Services', 'Courses', 'Events'];
         typeList.forEach(option => {
             const optionDiv = document.createElement('div');
             optionDiv.className = 'filter-option';
@@ -165,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
         const parentOptions = document.createElement('div');
         parentOptions.className = 'filter-options';
-        const parentList = ['MAHE', 'KMC', 'Outside Campus'];
+        const parentList = ['MAHE', 'KMC', 'Independent'];
         parentList.forEach(option => {
             const optionDiv = document.createElement('div');
             optionDiv.className = 'filter-option';
@@ -182,18 +200,43 @@ document.addEventListener('DOMContentLoaded', function () {
             optionDiv.appendChild(label);
             parentOptions.appendChild(optionDiv);
         });
+
+        const sortByOptions = document.createElement('div');
+        sortByOptions.className = 'filter-options';
+        const sortByList = ['Rating', 'Number of Reviews'];
+        sortByList.forEach(option => {
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'filter-option';
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'filter-type';
+            radio.value = option;
+            radio.id = `filter-${option.replace(/\s+/g, '-')}`;
+            if (selectedType === option) radio.checked = true;
+            const label = document.createElement('label');
+            label.htmlFor = radio.id;
+            label.textContent = option;
+            optionDiv.appendChild(radio);
+            optionDiv.appendChild(label);
+            sortByOptions.appendChild(optionDiv);
+        });
     
         rightSection.appendChild(typeOptions);
         rightSection.appendChild(parentOptions);
+        rightSection.appendChild(sortByOptions);
     
         parentOptions.classList.add('hidden');
+        sortByOptions.classList.add('hidden');
     
         function updateOptionsVisibility() {
             typeOptions.classList.add('fade-out');
             parentOptions.classList.add('fade-out');
+            sortByOptions.classList.add('fade-out');
             setTimeout(() => {
                 typeOptions.classList.toggle('hidden', selectedCategory !== 'Type');
                 parentOptions.classList.toggle('hidden', selectedCategory !== 'Parent');
+                sortByOptions.classList.toggle('hidden', selectedCategory !== 'Sort By');
+                sortByOptions.classList.toggle('fade-in', selectedCategory === 'Sort By');
                 typeOptions.classList.toggle('fade-in', selectedCategory === 'Type');
                 parentOptions.classList.toggle('fade-in', selectedCategory === 'Parent');
                 categories.forEach(cat => {
@@ -234,7 +277,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const typeMap = {
                     'Academic Blocks': 'Academic-Block',
                     'Restaurants': 'Restaurants',
-                    'Professors': 'Professors',
+                    'Clubs': 'Clubs',
                     'Student Clubs': 'Student-Clubs',
                     'Food Courts/Mess': 'Food-Court',
                     'Boys Hostel Blocks': 'Boys-Hostel-Blocks',
@@ -598,9 +641,9 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             rating = rating[0]
             if(rating.reviews === 1) {
-                ratingElement.innerText = `${rating.rating} \u2605 (${rating.reviews} Review)`;
+                ratingElement.innerText = `${rating.rating} \u2605 (${rating.reviews_no} Review)`;
             } else {
-                ratingElement.innerText = `${rating.rating} \u2605 (${rating.reviews} Reviews)`;
+                ratingElement.innerText = `${rating.rating} \u2605 (${rating.reviews_no} Reviews)`;
             }
         }
 
@@ -686,41 +729,41 @@ document.addEventListener('DOMContentLoaded', function () {
     function createModal(name, parent, type, image, description) {
         const modal = document.createElement('div');
         modal.className = 'modal';
-
+    
         const closeButton = document.createElement('button');
         closeButton.className = 'modal-close';
         closeButton.innerHTML = '<i class="fas fa-times"></i>';
         closeButton.onclick = closeModal;
-
+    
         const header = document.createElement('div');
         header.className = 'modal-header';
-
+    
         const titleSection = document.createElement('div');
         const title = document.createElement('h2');
         title.className = 'modal-title';
         title.textContent = name;
-
+    
         const parentEl = document.createElement('p');
         parentEl.className = 'modal-parent';
         parentEl.textContent = parent;
-
+    
         header.appendChild(titleSection);
         header.appendChild(parentEl);
         titleSection.appendChild(title);
-
+    
         const typeEl = document.createElement('p');
         typeEl.className = 'modal-type';
         typeEl.textContent = type;
-
+    
         const imageEl = document.createElement('img');
         imageEl.className = 'modal-image';
         imageEl.src = image;
         imageEl.alt = name;
-
+    
         const descriptionEl = document.createElement('p');
         descriptionEl.className = 'modal-description';
         descriptionEl.textContent = description;
-
+    
         const readReviewsButton = document.createElement('button');
         readReviewsButton.className = 'modal-button';
         const spanItem = document.createElement('span');
@@ -729,14 +772,25 @@ document.addEventListener('DOMContentLoaded', function () {
         stripDiv.className = 'strip';
         readReviewsButton.append(spanItem);
         readReviewsButton.append(stripDiv);
-
+    
+        readReviewsButton.addEventListener('click', () => {
+            console.log('Read Reviews button clicked');
+            const reviewsModal = openReviewsModal(name, 5, type, image, description);
+            modalOverlay.appendChild(reviewsModal);
+            console.log('Reviews modal appended to modalOverlay:', reviewsModal);
+            modalOverlay.style.display = 'block'; // Show the overlay
+            reviewsModal.style.display = 'flex'; // Explicitly show the modal
+            console.log('modalOverlay display:', modalOverlay.style.display);
+            console.log('reviewsModal display:', reviewsModal.style.display);
+        });
+    
         modal.appendChild(closeButton);
         modal.appendChild(header);
         modal.appendChild(typeEl);
         modal.appendChild(imageEl);
         modal.appendChild(descriptionEl);
         modal.appendChild(readReviewsButton);
-
+    
         return modal;
     }
 
@@ -783,11 +837,11 @@ document.addEventListener('DOMContentLoaded', function () {
         showMore.addEventListener('click', async function loadMore() {
             const filteredData2 = await fetchData(selectedType); // Fetch based on current selectedType
             const nextItems = filteredData2.slice(visibleItems, visibleItems + itemsPerLoad);
-            console.log(nextItems)
-            nextItems.forEach(item => async function work() {
-                const rating = await fetchRatings(filteredData[i].name);
+            for(let i = 0; i<nextItems.length; i++) {
+                item = nextItems[i]
+                const rating = await fetchRatings(item.name);
                 bigBox.appendChild(createBox(item, rating));
-            });
+            };
             visibleItems += itemsPerLoad;
 
             if (visibleItems >= filteredData2.length) {
@@ -796,4 +850,165 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         isInitialLoad = false;
     }
+    function openReviewsModal(itemName, rating, itemType, photoUrl, description) {
+        console.log('openReviewsModal called with:', { itemName, rating, itemType, photoUrl, description });
+    
+        const modal = document.createElement('div');
+        modal.classList.add('reviews-modal');
+    
+        const modalContent = document.createElement('div');
+        modalContent.classList.add('reviews-modal-content');
+    
+        // Close button
+        const closeBtn = document.createElement('button');
+        closeBtn.classList.add('modal-close');
+        closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+        closeBtn.addEventListener('click', () => {
+            console.log('Close button clicked');
+            closeModal();
+        });
+    
+        // Header
+        const header = document.createElement('div');
+        header.classList.add('reviews-header');
+        header.innerHTML = `
+            <h2>${itemName}</h2>
+            <span class="rating">${rating}</span>
+        `;
+    
+        // Item Type
+        const type = document.createElement('div');
+        type.classList.add('item-type');
+        type.textContent = itemType;
+    
+        // Body (Photo + Description)
+        const body = document.createElement('div');
+        body.classList.add('reviews-body');
+        body.innerHTML = `
+            <img src="${photoUrl}" alt="${itemName}" class="item-photo">
+            <p class="item-description">${description}</p>
+        `;
+    
+        // Reviews Section
+        const reviewsSection = document.createElement('div');
+        reviewsSection.classList.add('reviews-section');
+    
+        const reviewsHeader = document.createElement('h3');
+        reviewsHeader.textContent = 'Reviews';
+        reviewsSection.appendChild(reviewsHeader);
+        reviewsSection.appendChild(document.createElement('hr'));
+    
+        const reviewsContainer = document.createElement('div');
+        reviewsContainer.classList.add('reviews-container');
+    
+        // Pagination Setup
+        const reviewsPerPage = 7;
+        let currentPage = 1;
+        const totalReviews = staticReviews.length;
+        const totalPages = Math.ceil(totalReviews / reviewsPerPage);
+        let pageInfo = null; // Declare at function scope, initialize as null
+    
+        function renderReviews(page) {
+            reviewsContainer.innerHTML = ''; // Clear current reviews
+            const start = (page - 1) * reviewsPerPage;
+            const end = Math.min(start + reviewsPerPage, totalReviews);
+            const currentReviews = staticReviews.slice(start, end);
+    
+            currentReviews.forEach(review => {
+                const reviewDiv = document.createElement('div');
+                reviewDiv.classList.add('review');
+                reviewDiv.innerHTML = `
+                    <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAJQAugMBIgACEQEDEQH/xAAbAAEBAAMBAQEAAAAAAAAAAAAABgEEBQMCB//EADIQAQABAgMGBAQFBQAAAAAAAAABAgMEEVEFEiExUpETQWGSIjJTcSNCgcHRFBVicrH/xAAWAQEBAQAAAAAAAAAAAAAAAAAAAQL/xAAWEQEBAQAAAAAAAAAAAAAAAAAAEQH/2gAMAwEAAhEDEQA/AP1oBUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfNddNuia65iKY5zIPocu/tiimZixbmvL81U5Q1v7xiM84otxGnH+SDujj2ttZT+LZ4a0fxLp4fEWsRTNVqqJy5x5wD1AAAAAAAAAAAAAAAAAB83blNq3VcrnKmmM5TeNxdeLub1XCj8tDf27enOixTpvVfs5CgAIy+rV2uzcprt1btUTwl8AKbA4qnF2d/lXHzU6NhO7LvzZxdEZ/BX8M/qok1QAAAAAAAAAAAAABiWQE9tic9oXOPKKYjs03R25b3MVTcy4V0/8c1UAAAAZpmaaomOcTnCtnnKXwlubuJtUR51Rn9vNUTzNUAQAAAAAAAAAAAAAAau0cN/VYeaY+eONKcqiaapiYmMucT5K1pY7Z9GKzroyoudWv3WieGxfweIsTPiWpy6qeMPDKdFRgelqxdu1ZWrdVU+kOrgdlRRMV4n4p8qI/dBnY2Em3H9RcjKaoypj01dQ9BFAAAAAAAAAAAAAACeHN44rE2sNTndq4+URzlx7+1r9yZ8KItU+WXGe4O8JarE36vmvXJn/aWPHu/Vue+Vgqu75mimZzmiJn7Jfx7v1bnvk8e79W575BVRy5ZCV8e79W575PHu/Vue+QVWQlvHvfWue+WxZ2nirXO5vxpXxIKEaeC2haxWVHyXemrz/VuIAAAAAAAAAADxxeIpwtmblXHypjWXs4O2b814rw4n4bcZZeoNO9ervVzXdmZqn15ejzZYaQAQAAAAAFGYzz4TlMaO9svGTiaJt3J/Foj3Q4L0w16qxiLd2mflnj9kFSMRMTETHKeTKKAAAAAAAAJfFVb2KvTM/nlUPncp6adeMAlM41gzjWFXu09NPY3aemnstSJTONYM41hV7tPTT2N2npp7FIlM41gzjWFXu09NPY3aemnsUiUzjWDONYVe7T009jdp6aexSJTONYM41hV7tPTT2N2npp7FIlM41gzictVZu09NPY3aemnsUjywVW9hLM/4Q92I4cmUUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB/9k=" alt="Profile" class="profile-pic">
+                    <div class="review-content">
+                        <div class="review-header">
+                            <div class="reviewer-name">${review.reviewerName}</div>
+                            <div class="review-rating">${review.rating} ★</div>
+                        </div>
+                        <div class="review-text">${review.reviewText}</div>
+                    </div>
+                `;
+                reviewsContainer.appendChild(reviewDiv);
+            });
+    
+            // Update page info only if it exists
+            if (pageInfo) {
+                pageInfo.textContent = `Page ${page} of ${totalPages}`;
+            }
+        }
+    
+        // Initial render
+        renderReviews(currentPage);
+    
+        // Pagination Controls (only if > 7 reviews)
+        if (totalReviews > reviewsPerPage) {
+            const paginationContainer = document.createElement('div');
+            paginationContainer.classList.add('pagination-container');
+    
+            const prevButton = document.createElement('button');
+            prevButton.innerHTML = '←'; // Left arrow
+            prevButton.classList.add('pagination-button');
+            prevButton.disabled = currentPage === 1;
+            prevButton.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderReviews(currentPage);
+                    prevButton.disabled = currentPage === 1;
+                    nextButton.disabled = false;
+                }
+            });
+    
+            pageInfo = document.createElement('span'); // Initialize here
+            pageInfo.classList.add('page-info');
+            pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+    
+            const nextButton = document.createElement('button');
+            nextButton.innerHTML = '→'; // Right arrow
+            nextButton.classList.add('pagination-button');
+            nextButton.disabled = currentPage === totalPages;
+            nextButton.addEventListener('click', () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderReviews(currentPage);
+                    nextButton.disabled = currentPage === totalPages;
+                    prevButton.disabled = false;
+                }
+            });
+    
+            paginationContainer.appendChild(prevButton);
+            paginationContainer.appendChild(pageInfo);
+            paginationContainer.appendChild(nextButton);
+            reviewsSection.appendChild(paginationContainer);
+        }
+    
+        reviewsSection.appendChild(reviewsContainer);
+    
+        // Append all to modal content
+        modalContent.appendChild(closeBtn);
+        modalContent.appendChild(header);
+        modalContent.appendChild(type);
+        modalContent.appendChild(body);
+        modalContent.appendChild(reviewsSection);
+        modal.appendChild(modalContent);
+    
+        // Close when clicking outside
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                console.log('Clicked outside reviews modal');
+                closeModal();
+            }
+        });
+    
+        console.log('Reviews modal created:', modal);
+        return modal;
+    }
+    modalOverlay.addEventListener('click', (event) => {
+        if (event.target === modalOverlay) {
+            closeModal();
+        }
+    });
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && modalOverlay.style.display === 'block') {
+            closeModal();
+        }
+    });
 });
