@@ -1,16 +1,32 @@
 [
     {
-        "name": "Block 21",
-        "parent": "MAHE",
-        "type": "Girls Hostel Block",
-        "desc": "New Ladies Block (NLB), People call it the princess tower. AC/non-AC singles, luxe as hell, near Student Plaza. Five-minute food court dash, 10 to academics—prime location. Kitchenette and privacy? Introvert heaven. Pricey, though—worth it for the flex.",
-        "image": "https://qph.cf2.quoracdn.net/main-qimg-3f8b7e8e8f7e8e8f7e8e8f7e8e8f7e8e.webp"
+        "name": "Dexter",
+        "type": "restaurants",
+        "parent": "independent",
+        "description": "Dexter’s a greasy spoon with a serial killer’s charm—dark humor on the menu, burgers to die for. The fries are crisp, the vibes are chill, and the waiter’s got a smirk like he knows your secrets. Walls plastered with quirky quotes, it’s where you eat cheap and leave happy. Rumor has it, the chef’s playlist is pure chaos."
     },
     {
-        "name": "Block 22",
-        "parent": "MAHE",
-        "type": "Girls Hostel Block",
-        "desc": "Newest girls’ block, yellow deluxe vibes. People say it’s posh—AC/non-AC, great furniture, but stuffy in heat. Near Apoorva Mess, 15-minute academic walk. Two batches in, still shiny. Overpriced but cozy.",
-        "image": "https://qph.cf2.quoracdn.net/main-qimg-4f8b7e8e8f7e8e8f7e8e8f7e8e8f7e8e.webp"
+        "name": "Down Town Bar",
+        "type": "restaurants",
+        "parent": "independent",
+        "description": "Down Town Bar serves food with a side of sass—think spicy wings and spicier banter. The decor’s stuck in the ‘90s, the jukebox eats coins, and the owner’s dog naps by the bar. It’s quirky, loud, and the kind of place where your order comes with a free life lesson. Comfort food heaven for the reckless."
+    },
+    {
+        "name": "Hakuna Matata",
+        "type": "restaurants",
+        "parent": "independent",
+        "description": "Hakuna Matata’s a worry-free zone with food that hugs your soul. The menu’s a wild mashup—pizza meets curry—and the staff dance to reggae beats. Quirky signs say ‘No Stress,’ but the spice might test you. It’s chill chaos, with mismatched chairs and a vibe that screams ‘eat, laugh, repeat.’ Perfect for a laid-back night out."
+    },
+    {
+        "name": "Edge",
+        "type": "restaurants",
+        "parent": "independent",
+        "description": "Edge teeters on the brink of genius and madness—food’s bold, vibes are sharper. Think fiery tacos and cocktails that bite back, served on a rooftop with a view. The staff’s got attitude, the playlist’s eclectic, and the neon sign flickers like it’s flirting. Quirky enough to keep you guessing, edgy enough to keep you coming back."
+    },
+    {
+        "name": "Bacchus",
+        "type": "restaurants",
+        "parent": "independent",
+        "description": "Bacchus is a boozy tribute to the god of excess—wine flows, plates overflow. The menu’s a quirky mix of gourmet and gluttony, served by waiters who wink too much. Dim lights, loud laughs, and a mural of a drunk deity set the scene. It’s where you feast like a Roman and leave with stories—bring your stretchy pants."
     }
 ]
