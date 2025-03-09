@@ -18,6 +18,7 @@ function getTimeAgo(dateInput) {
   }
   
   document.addEventListener('DOMContentLoaded', function () {
+    console.log(screen.width)
     const logo = document.querySelector('.navbar-logo');
     logo.addEventListener('click', () => {
       window.location.href = 'index.html';
@@ -180,12 +181,14 @@ function getTimeAgo(dateInput) {
       });
   
       const sortByOptions = document.createElement('div');
-      sortByOptions.className = 'filter-options';
+      sortByOptions.className = 'filter-options-sort';
       const sortByList = ['Rating', 'Number of Reviews'];
       sortByList.forEach(option => {
         const optionDiv = document.createElement('div');
         optionDiv.className = 'filter-option';
         const radio = document.createElement('input');
+        radio.style.width = '16px';
+        radio.style.height = '16px';
         radio.type = 'radio';
         radio.name = 'filter-type';
         radio.value = option;
@@ -406,6 +409,10 @@ function getTimeAgo(dateInput) {
       const anonymityCheckbox = document.createElement('input');
       anonymityCheckbox.type = 'checkbox';
       anonymityCheckbox.id = 'anonymity-' + itemName.replace(/\s+/g, '-');
+      if(screen.width < 800) {
+        anonymityCheckbox.style.width = '14px';
+        anonymityCheckbox.style.height = '14px';
+      }
       const anonymityLabel = document.createElement('label');
       anonymityLabel.htmlFor = anonymityCheckbox.id;
       anonymityLabel.textContent = 'Anonymous Review';
@@ -562,7 +569,7 @@ function getTimeAgo(dateInput) {
       const reviewButton = document.createElement('button');
       reviewButton.className = 'box-button';
       const spanItem = document.createElement('span');
-      spanItem.textContent = 'Leave a Review';
+      spanItem.textContent = screen.width <= 800 ? 'Review' : 'Leave a Review';
       const stripDiv = document.createElement('div');
       stripDiv.className = 'strip';
       reviewButton.append(spanItem);
